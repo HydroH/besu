@@ -11,10 +11,9 @@ pub extern "system" fn Java_org_hyperledger_besu_precompiles_Anonymous_nativeGas
     _class: JClass<'local>,
     input: JByteArray<'local>,
 ) -> jlong {
-    let input = env.convert_byte_array(input).unwrap();
-    let data = input.as_slice();
+    let data = env.convert_byte_array(input).unwrap();
 
-    gas(data).unwrap_or_default() as jlong
+    gas(data.as_ref()).unwrap_or_default() as jlong
 }
 
 #[no_mangle]
@@ -24,10 +23,9 @@ pub extern "system" fn Java_org_hyperledger_besu_precompiles_Anonymous_nativeRun
     _class: JClass<'local>,
     input: JByteArray<'local>,
 ) -> jbyte {
-    let input = env.convert_byte_array(input).unwrap();
-    let data = input.as_slice();
+    let data = env.convert_byte_array(input).unwrap();
 
-    if let Err(e) = verify(data) {
+    if let Err(e) = verify(data.as_ref()) {
         e.code() as jbyte
     } else {
         0
